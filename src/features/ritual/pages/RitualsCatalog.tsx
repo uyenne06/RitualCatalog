@@ -30,7 +30,7 @@ export default function RitualsCatalog() {
 
   const { rituals, error, pagination } = useRituals({
     page: Number(searchParams.get("page")) || 1,
-    search: searchParams.get("search") || undefined,
+    search: searchParams.get("search") || undefined, //rbgw
     isHot: isHot,
   });
   console.log(rituals);
