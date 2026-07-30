@@ -1,48 +1,86 @@
 import { useRituals } from "../hooks/useRituals";
 import RitualCard from "../components/ritualCard";
 import { Pagination } from "@/shared/components/common/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
 import { useDebounce } from "@/shared/hooks/useDebounce";
+import { useSearchParams } from "react-router-dom";
 // dữ liệu để search filter đang lưu dưới dạng state
 
 export default function RitualsCatalog() {
-  const [page, setPage] = useState(1);
-  const [searchInput, setSearchInput] = useState("");
-  const [data, setData] = useState<boolean | undefined>(undefined);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("search") || "",
+  );
   const debouncedSearch = useDebounce(searchInput, 500);
+  const page = Number(searchParams.get("page")) || 1;
+  const isHotParam = searchParams.get("isHot");
+  const isHot =
+    isHotParam === "true" ? true : isHotParam === "false" ? false : undefined;
+
   const { rituals, error, pagination } = useRituals({
-    page,
-    search: debouncedSearch,
-    isHot: data,
+    page: Number(searchParams.get("page")) || 1,
+    search: searchParams.get("search") || undefined,
+    isHot: isHot,
   });
   console.log(rituals);
-
   const handlePageChange = (page: number) => {
-    setPage(page);
+    const params = new URLSearchParams(searchParams); // searchParams ăn theo giá trị của param hiện tại trên url
+    params.set("page", String(page));
+    setSearchParams(params);
   };
+
+  const handleFilterChange = (key: string, value: string | undefined) => {
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    params.set("page", "1");
+    setSearchParams(params);
+  };
+
+  useEffect(() => {
+    if (debouncedSearch !== searchParams.get("search")) {
+      const params = new URLSearchParams(searchParams);
+      if (debouncedSearch) {
+        params.set("search", debouncedSearch);
+      } else {
+        params.delete("search");
+      }
+      params.set("page", "1");
+      setSearchParams(params);
+    }
+  }, [debouncedSearch]);
+
   const handleSearchParam = (search: string) => {
     setSearchInput(search);
   };
 
-  const handleStatusChange = (status: string) => {
-    if (status === "all") {
-      setData(undefined);
-    } else if (status === "true") {
-      setData(true);
-    } else {
-      setData(false);
-    }
-  };
+  // const handlePageChange = (page: number) => {
+  //   setPage(page);
+  // };
+
+  // const handleStatusChange = (status: string) => {
+  //   if (status === "all") {
+  //     setData(undefined);
+  //   } else if (status === "true") {
+  //     setData(true);
+  //   } else {
+  //     setData(false);
+  //   }
+  // };
 
   // if (isLoading) {
   //   return <p>Đang tải dữ liệu ritual...</p>;
@@ -96,14 +134,21 @@ export default function RitualsCatalog() {
           Trạng thái
         </div>
         <div className="w-full sm:w-auto">
-          <Select onValueChange={(value) => handleStatusChange(value)}>
+          <Select
+            value={searchParams.get("isHot") || "all"}
+            onValueChange={(e) =>
+              handleFilterChange("isHot", e === "all" ? undefined : e)
+            }
+          >
             <SelectTrigger className="h-11 w-full rounded-xl border-gray-200 bg-white shadow-sm">
               <SelectValue placeholder="Tất cả trạng thái" />
             </SelectTrigger>
             <SelectContent align="start">
-              <SelectItem value="all">Tất cả</SelectItem>
-              <SelectItem value="true">Hot</SelectItem>
-              <SelectItem value="false">Không hot</SelectItem>
+              <SelectGroup>
+                <SelectItem value="all">Tất cả</SelectItem>
+                <SelectItem value="true">Hot</SelectItem>
+                <SelectItem value="false">Không hot</SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
