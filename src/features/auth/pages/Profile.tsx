@@ -19,7 +19,7 @@ const ProfilePage = () => {
     isError, // có bị lỗi ko ? => true: fetch bị lỗi
     error, // object chứa những lỗi trên
     refetch, // hàm: để gọi queryFn, fetch lại (manually)
-    isFetching, // true = đang fetch (dù có data hay không) - có đang gọi api không ?
+    // isFetching, // true = đang fetch (dù có data hay không) - có đang gọi api không ?
     isLoading, // biến để check xem có đang call api k - true = lần đầu fetch, ch có data - có gọi api lần đầu không ?
   } = useUser();
 
@@ -42,7 +42,6 @@ const ProfilePage = () => {
 
   if (isLoading) return <LoadingState />;
   if (isError) {
-    console.log();
     return (
       <ErrorState
         message={error?.message || "Failed to load profile"}

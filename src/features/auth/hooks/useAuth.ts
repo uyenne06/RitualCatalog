@@ -6,6 +6,7 @@ import { useAuthStore } from "../store";
 import { queryClient } from "@/lib/queryClient";
 import type { AuthResponse, JwtPayload, LoginRequest } from "../types";
 import { jwtDecode } from "jwt-decode";
+import type { AxiosError } from "axios";
 
 export const useRegisterMutation = () => {
   const navigate = useNavigate();
@@ -19,15 +20,16 @@ export const useRegisterMutation = () => {
 
     onSuccess: () => {
       toast.success("Đăng ký thành công");
-      const from = (location as any)?.from?.pathname || "/profile";
+      const from =
+        (location as { from?: { pathname: string } })?.from?.pathname ||
+        "/profile";
       navigate(from, { replace: true });
     },
 
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(
         error.response?.data?.message || "Đăng ký thất bại, vui lòng thử lại",
       );
-      console.log(error.response?.data?.message);
     },
 
     onSettled: () => {
@@ -46,11 +48,9 @@ export const useLoginMutation = () => {
   return useMutation<AuthResponse, Error, LoginRequest>({
     mutationFn: (data) => authApi.login(data),
     onSuccess: (res) => {
-      console.log(res);
-      const decoded = jwtDecode<JwtPayload>(res.data.accessToken);
-      console.log(decoded.role);
+      const decoded = jwtDecode<JwtPayload>(res.accessToken);
       setAuth({
-        accessToken: res.data.accessToken,
+        accessToken: res.accessToken,
         role: decoded.role,
       });
 
@@ -86,14 +86,13 @@ export const useLogoutMutation = () => {
       navigate("/login");
     },
 
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(
         error.response?.data?.message ||
           "Đăng xuất gặp sự cố, nhưng vẫn đăng xuất",
       );
       clearTokens();
       queryClient.removeQueries();
-      console.log(error.response?.data?.message);
     },
 
     onSettled: () => {

@@ -8,7 +8,6 @@ import {
 } from "@/shared/components/ui/pagination";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { en } from "zod/v4/locales";
 
 interface PaginantionProps {
   meta: PaginationMeta;
@@ -19,7 +18,7 @@ interface PaginantionProps {
 export function Pagination({
   meta,
   onPageChange,
-  className,
+  // className,
 }: PaginantionProps) {
   const { currentPage, totalPages, hasPreviousPage, hasNextPage } = meta;
   if (totalPages <= 1) return null;

@@ -18,7 +18,6 @@ import { Button } from "@/shared/components/ui/button";
 // import { useRegisterMutation } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
-  console.log("component render...");
   // const navigate = useNavigate();
   // const location = useLocation();
   // const setTokens = useAuthStore((state) => state.setTokens);

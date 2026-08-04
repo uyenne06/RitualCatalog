@@ -1,8 +1,6 @@
 import type { AxiosInstance } from "axios";
 import type { PaginatedResponse, SelectOption } from "../types";
 import apiClient from "@/lib/axios";
-import { en } from "zod/v4/locales";
-import type { Primitive } from "react-hook-form";
 
 export interface BaseServiceConfig<
   TEntity, //Type cua entity chinh CD: user, retual

@@ -1,18 +1,43 @@
+/* eslint-disable react-refresh/only-export-components */
 import MainLayout from "@/features/auth/components/layouts/MainLayout";
-import Adminlyaout from "@/features/auth/pages/Adminlyaout";
-import DashboardPage from "@/features/ritual/pages/DashboardPage";
+// import DashboardPage from "@/features/ritual/pages/DashboardPage";
 import HomePage from "@/features/auth/pages/HomePage";
 import LoginPage from "@/features/auth/pages/LoginPage";
-import ManageRitualCreate from "@/features/ritual/pages/ManageRitualCreate";
-import ManageRitualEdit from "@/features/ritual/pages/ManageRitualEdit";
-import ManageRitualList from "@/features/ritual/pages/ManageRitualList";
+import { lazy, Suspense, type ReactNode } from "react";
+
+const Adminlyaout = lazy(() => import("@/features/auth/pages/Adminlyaout"));
+
+const DashboardPage = lazy(
+  () => import("@/features/ritual/pages/DashboardPage"),
+);
+
+const ManageRitualCreate = lazy(
+  () => import("@/features/ritual/pages/ManageRitualCreate"),
+);
+const UserManagement = lazy(
+  () => import("@/features/ritual/pages/UserManagement"),
+);
+
+const ManageRitualEdit = lazy(
+  () => import("@/features/ritual/pages/ManageRitualEdit"),
+);
+
+const ManageRitualList = lazy(
+  () => import("@/features/ritual/pages/ManageRitualList"),
+);
+
+const withSuspense = (children: ReactNode) => {
+  return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>;
+};
+// import ManageRitualCreate from "@/features/ritual/pages/ManageRitualCreate";
+// import ManageRitualEdit from "@/features/ritual/pages/ManageRitualEdit";
 import NotFoundPage from "@/features/ritual/pages/NotFoundPage";
 import ProfilePage from "@/features/auth/pages/Profile";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
 import RitualsCatalog from "@/features/ritual/pages/RitualsCatalog";
 import RitualsDetails from "@/features/ritual/pages/RitualsDetails";
 import UnauthorizedPage from "@/features/ritual/pages/UnauthorizedPage";
-import UserManagement from "@/features/ritual/pages/UserManagement";
+// import UserManagement from "@/features/ritual/pages/UserManagement";
 import { GuestRoute } from "@/shared/components/guards/GuestRoute";
 import { ProtectedRoute } from "@/shared/components/guards/ProtectedRoute";
 import { createBrowserRouter } from "react-router-dom";
@@ -95,7 +120,7 @@ export const router = createBrowserRouter([
         path: "admin",
         element: (
           <ProtectedRoute allowedRoles={["admin"]}>
-            <Adminlyaout />
+            {withSuspense(<Adminlyaout />)}
           </ProtectedRoute>
         ),
         children: [

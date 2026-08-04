@@ -23,7 +23,7 @@ export default function RitualsCatalog() {
     searchParams.get("search") || "",
   );
   const debouncedSearch = useDebounce(searchInput, 500);
-  const page = Number(searchParams.get("page")) || 1;
+  // const page = Number(searchParams.get("page")) || 1;
   const isHotParam = searchParams.get("isHot");
   const isHot =
     isHotParam === "true" ? true : isHotParam === "false" ? false : undefined;
@@ -33,7 +33,6 @@ export default function RitualsCatalog() {
     search: searchParams.get("search") || undefined, //rbgw
     isHot: isHot,
   });
-  console.log(rituals);
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams); // searchParams ăn theo giá trị của param hiện tại trên url
     params.set("page", String(page));
@@ -62,7 +61,7 @@ export default function RitualsCatalog() {
       params.set("page", "1");
       setSearchParams(params);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, searchParams, setSearchParams]);
 
   const handleSearchParam = (search: string) => {
     setSearchInput(search);
