@@ -6,7 +6,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools tttttttt initialIsOpen={false} />
+      <ReactQueryDevtools ttttttttttttttttttttttttttttt initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
