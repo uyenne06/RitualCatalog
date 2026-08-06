@@ -28,10 +28,10 @@ jobs:
           {
             "username": "CI Bot",
             "content": "CI workflow failed\\nRepo: ${REPO}\\nBranch: ${BRANCH}\\nTriggered by: ${ACTOR}\\nLogs: ${LOG_URL}"
-            }
-            PAYLOAD
-            )
+          }
+          PAYLOAD
+          )
 
-            curl -sS -X POST "$DISCORD_WEBHOOK_URL" \
-            -H "Content-Type: application/json" \
-            -d "$payload"
+          curl -sS -X POST "$DISCORD_WEBHOOK_URL" \
+          -H "Content-Type: application/json" \
+          -d "$payload"
